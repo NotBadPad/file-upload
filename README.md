@@ -14,8 +14,4 @@ HTTP文件上传的小例子，主要实现了后台对HTTP中input:file文件�
 </ul>
 类介绍
 ===========
-file-upload\n\r
- --org.eh.fileupload\n\r
-   --Analysis.java   HTTP请求content分析类，从content中提取出file信息\n\r
-   --EHHttpServer.java   主服务类，启动服务并接收HTTP请求\n\r
-   --FileInfo.java   file封装\n\r
+<p>file-upload<br />&nbsp;--org.eh.fileupload<br />&nbsp; &nbsp; --Analysis.java   HTTP请求content分析类，从content中提取出file信息<br />&nbsp; &nbsp; --EHHttpServer.java   主服务类，启动服务并接收HTTP请求<br />&nbsp; &nbsp; --FileInfo.java   file封装</p>
