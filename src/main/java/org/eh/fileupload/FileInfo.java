@@ -3,6 +3,7 @@ package org.eh.fileupload;
 public class FileInfo {
 	
 	private String filename;	//文件名
+	private String fieldname; // 表单中参数名
 	private int length;	//文件长度
 	private byte[] bytes;	//文件字节数组
 	
@@ -23,6 +24,14 @@ public class FileInfo {
 	}
 	public void setBytes(byte[] bytes) {
 		this.bytes = bytes;
+	}
+
+	public String getFieldname() {
+		return fieldname;
+	}
+
+	public void setFieldname(String fieldname) {
+		this.fieldname = fieldname;
 	}
 	
 	

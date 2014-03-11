@@ -1,8 +1,8 @@
 package org.eh.fileupload;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Map;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -40,14 +40,15 @@ public class EHHttpServer {
 			int length = Integer.parseInt(headers.get("Content-length").toString().replace("[", "")
 					.replace("]", ""));
 
-			FileInfo fileInfo = Analysis.parse(httpExchange.getRequestBody(),
+			Map<String, Object> map = Analysis.parse(httpExchange.getRequestBody(),
 					contentType, length);
-			FileOutputStream fos = new FileOutputStream(
-					System.getProperty("user.dir") + "\\temp\\"
-							+ fileInfo.getFilename());
-			fos.write(fileInfo.getBytes());
-			fos.close();
 
+			// FileInfo fileInfo = map.get("file");
+			// FileOutputStream fos = new FileOutputStream(
+			// System.getProperty("user.dir") + "\\temp\\"
+			// + fileInfo.getFilename());
+			// fos.write(fileInfo.getBytes());
+			// fos.close();
 		}
 	}
 

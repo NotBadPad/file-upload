@@ -5,7 +5,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 解析content获取文件信息
@@ -19,7 +20,7 @@ public class Analysis {
 	static final int FIELDDATA = 3;
 	static final int MXA_SEGSIZE = 1000 * 1024 * 10; //最大文件长度
 	
-	public static FileInfo parse(InputStream ins, String contentType, int totalLength)
+	public static Map<String, Object> parse(InputStream ins, String contentType, int totalLength)
 			throws IOException {
 
 		FileInfo fileInfo =new FileInfo();
@@ -28,8 +29,8 @@ public class Analysis {
 		String filename = ""; // 文件名
 		String boundary = ""; // 分界符
 		String lastboundary = ""; // 结束符
-		String filePath = "";
-		Hashtable<String, String> formfields = new Hashtable<String, String>();
+		String filefieldname = ""; // 文件表单域名
+		Map<String, Object> formfields = new HashMap<String, Object>();
 		int filesize = 0; // 文件长度
 
 		int pos = contentType.indexOf("boundary=");
@@ -80,14 +81,21 @@ public class Analysis {
 					s = s.substring(0, l - 1);
 					fieldname = s;
 					state = FIELDDATA;
-				} else { // 将文件名解析出来
+				} else {
 					String temp = s;
+					// 将文件表单参数名解析出来
+					pos = s.indexOf("name=");
+					pos += "name=".length() + 1;
+					s = s.substring(pos);
+					int pos1 = s.indexOf("\";");
+					filefieldname = s.substring(0, pos1);
+
+					// 将文件名解析出来
 					pos = s.indexOf("filename=");
 					pos += "filename=".length() + 1;
 					s = s.substring(pos);
 					int l = s.length();
 					s = s.substring(0, l - 1);// 去掉最后那个引号”
-					filePath = s;
 					pos = s.lastIndexOf("\\");
 					s = s.substring(pos + 1);
 					filename = s;
@@ -112,7 +120,6 @@ public class Analysis {
 						b = subBytes(b, 0, pos - 1);
 
 					filesize = b.length - 1;
-					formfields.put("filesize", String.valueOf(filesize));
 					state = FILEDATA;
 				}
 				break;
@@ -133,10 +140,12 @@ public class Analysis {
 				break;
 			}
 		}
+		fileInfo.setFieldname(filefieldname);
 		fileInfo.setBytes(b);
 		fileInfo.setFilename(filename);
-		fileInfo.setLength(b.length);
-		return fileInfo;
+		fileInfo.setLength(filesize);
+		formfields.put(filefieldname, fileInfo);
+		return formfields;
 
 	}
 
